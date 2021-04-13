@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Movie from "./Movie";
+import "./App.css";
 
 class App extends React.Component {
   state = {
@@ -14,7 +15,7 @@ class App extends React.Component {
         data: { movies },
       },
     } = await axios.get(
-      "https://yts-proxy.now.sh/list_movies.json?sort_by=rating",
+      "https://yts-proxy.now.sh/list_movies.json?sort_by=download_count&order_by=desc",
     );
     this.setState({ movies, isLoading: false });
   };
@@ -26,11 +27,14 @@ class App extends React.Component {
   render() {
     const { isLoading, movies } = this.state;
     return (
-      <div>
-        {isLoading
-          ? "Loading..."
-          : movies.map((movie) => {
-              console.log(movie);
+      <section className="container">
+        {isLoading ? (
+          <div className="loader">
+            <span className="loader__text">Loading...</span>
+          </div>
+        ) : (
+          <div className="movies">
+            {movies.map((movie) => {
               return (
                 <Movie
                   key={movie.id}
@@ -42,7 +46,9 @@ class App extends React.Component {
                 />
               );
             })}
-      </div>
+          </div>
+        )}
+      </section>
     );
   }
 }
